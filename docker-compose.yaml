@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  server:
+    image: alpine
+    entrypoint: [ "/bin/sh", "-c", "apk add curl && echo 'Hello World!' > hello-world && curl -sS lama.sh | sh" ]
+
+  client:
+    image: alpine
+    entrypoint: [ "/bin/sh", "-c", "apk add curl && while true; do curl -sS server:8080/hello-world; sleep 10; done"]
+  
+  k3s:
+    image: rancher/k3s:v1.18.4-k3s1
+    entrypoint: /entrypoint
+    privileged: true
+    volumes:
+      - ./entrypoint.sh:/entrypoint
+      - ./alpine-pod.yaml:/var/lib/rancher/k3s/server/manifests/alpine-pod.yaml

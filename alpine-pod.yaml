@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+  namespace: default
+spec:
+  containers:
+  - image: alpine
+    command:
+      - /bin/sh
+      - "-c"
+      - "apk add curl && while true; do curl -sS server:8080/hello-world; sleep 10; done"
+    imagePullPolicy: IfNotPresent
+    name: alpine
+  restartPolicy: Always
